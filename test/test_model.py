@@ -1,6 +1,7 @@
 import unittest
 
 from simulation.model import CommunicationNetwork
+from simulation.model import TimeVaryingHypergraph
 
 
 class ModelTest(unittest.TestCase):
@@ -24,3 +25,12 @@ class ModelDataTest(unittest.TestCase):
 
         self.assertEqual(len(communciation_network.vertices()), 37103)
         self.assertEqual(len(communciation_network.hyperedges()), 309740)
+
+
+class TestTimeVaryingHypergraph(unittest.TestCase):
+
+    def test_TimeVaringHypergraph_vertex(self):
+        hypergraph = TimeVaryingHypergraph({"h1": ["v1","v2"]}, {"h1": 1, "h2": 4})
+
+        #gives hedges(first param)
+        self.assertEqual({"h1"}, hypergraph.hyperedges())

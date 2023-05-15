@@ -1,0 +1,9 @@
+name: GitHub Actions information diffusion
+run-name: ${{ github.actor }} is tested the program 🚀
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "This job's status is ${{ job.status }}."
+      - run: echo py -m unittest

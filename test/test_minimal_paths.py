@@ -23,20 +23,17 @@ class MinimalPath(unittest.TestCase):
     def test_4(self):
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
+        #print(result_2)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
-    # Our tests
+class test_more(unittest.TestCase):
     # changed variable input
-    def test_5(self):
+    def test_5_wierd_parameter(self):
         self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
 
     # Repeat test
     def test_6(self):   # EJ KLAR - Kräver mer alg. Research
-        rep_dict = {
-            'v2': 2,
-            'v3': 2,
-            'v4': 3
-        }
+       
         for i in range(5):
             result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
             result_2 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)

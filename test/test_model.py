@@ -75,3 +75,14 @@ class TestCommunicationNetwork(unittest.TestCase):
     def test_from_json(self):
         pass
         #maybe mock
+        
+    def test_time_varying_hypergraph_exceptions_input_strings(self):
+        hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 'words', 'h2': 'words', 'h3': 'words'})#changed integers to strings
+        self.assertRaises(hyper_graph)
+
+    def test_time_varying_hypergraph_exceptions_input_ints(self):
+        hyper_graph = TimeVaryingHypergraph({1: [1, 2], 2: [2, 3], 3: [3, 4]}, {1: 1, 2: 2, 3: 3})#changed strings to integers
+        self.assertRaises(hyper_graph)
+
+    def test_datastructure_constructor(self):
+        pass

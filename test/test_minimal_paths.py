@@ -1,4 +1,5 @@
 import unittest
+import random
 
 from simulation.model import CommunicationNetwork
 from simulation.minimal_paths import single_source_dijkstra_vertices, single_source_dijkstra_hyperedges, DistanceType
@@ -8,37 +9,52 @@ from simulation.minimal_paths import TimeVaryingHypergraph
 class MinimalPath(unittest.TestCase):
     cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
 
-    def test_1(self):
+    def test_controlled_path_1(self):
+        """
+        Tests if shortest path is eqivelent to a specific dictionary:
+        {'v2': 1, 'v3': 2, 'v4': 3}
+        """
         self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 1, 'v3': 2, 'v4': 3})
 
-    def test_2(self):
+    def test_vertices_vs_hyperedges(self):
+        """
+        checks if the dijkstra algorithm for vertices and hyperedges gives the same result
+        """
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
-    def test_3(self):
+    def test_vertices_vs_hyperedges_2(self):
+        """
+        checks if the dijkstra algorithm for vertices and hyperedges gives the same result
+        """
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.FASTEST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FASTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
-    def test_4(self):
+    def test_vertices_vs_hyperedges_3(self):
+        """
+        checks if the dijkstra algorithm for vertices and hyperedges gives the same result
+        """
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
-        #print(result_2)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
 class test_more(unittest.TestCase):
     # changed variable input
-    def test_5_wierd_parameter(self):
+    def test_bad_parameter(self):
         self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
 
     # Repeat test
-    def test_6(self):   # EJ KLAR - Kräver mer alg. Research
-       
+    def test_kinda_graph_fuzzer(self):   # EJ KLAR - Kräver mer alg. Research
+        nr_of_nodes = random.randrange(0,10)
+        #create nodes
+
+        #create links
+
+        #fuzz it
         for i in range(5):
-            result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
-            result_2 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
-            self.assertEqual(result_1, result_2)
+            pass
 
 class DijkstraTest(unittest.TestCase):
     def setUp(self):

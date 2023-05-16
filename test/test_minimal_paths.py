@@ -40,10 +40,10 @@ class MinimalPath(unittest.TestCase):
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
-class test_more(unittest.TestCase):
+class test_stability(unittest.TestCase):
     # changed variable input
     def test_bad_parameter(self):
-        self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
+        self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 3, DistanceType.SHORTEST, min_timing=0), {'v2': 1, 'v3': 2, 'v4': 3})
 
     # Repeat test
     def test_kinda_graph_fuzzer(self):   # EJ KLAR - Kräver mer alg. Research
@@ -56,7 +56,7 @@ class test_more(unittest.TestCase):
         for i in range(5):
             pass
 
-class DijkstraTest(unittest.TestCase):
+class test_correctness(unittest.TestCase):
     def setUp(self):
         """Check to see if the setup works"""
         hedges = {

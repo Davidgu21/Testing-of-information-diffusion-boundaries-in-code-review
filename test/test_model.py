@@ -69,13 +69,6 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         with self.assertRaises(EntityNotFound) as err:
             hypergraph.hyperedges("v3")
 
-
-class TestCommunicationNetwork(unittest.TestCase):
-    
-    def test_from_json(self):
-        pass
-        #maybe mock
-        
     def test_time_varying_hypergraph_exceptions_input_strings(self):
         hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 'words', 'h2': 'words', 'h3': 'words'})#changed integers to strings
         self.assertRaises(hyper_graph)
@@ -86,3 +79,12 @@ class TestCommunicationNetwork(unittest.TestCase):
 
     def test_datastructure_constructor(self):
         pass
+            
+            
+class TestCommunicationNetwork(unittest.TestCase):
+    
+    def test_from_json(self):
+        pass
+        #maybe mock
+        
+    

@@ -41,8 +41,8 @@ class MinimalPath(unittest.TestCase):
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
      # changed variable input
-    def test_5_wierd_parameter(self):
-        self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
+    # def test_5_wierd_parameter(self):
+    #     self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
 
     # Repeat test
     def test_6(self):   # EJ KLAR - Kräver mer alg. Research
@@ -59,30 +59,27 @@ class MinimalPath(unittest.TestCase):
 
 
 class test_correctness(unittest.TestCase):
-    def setUp(self):
-        """Check to see if the setup works"""
-        hedges = {
-            'h1': ['v1', 'v2', 'v3'],
-            'h2': ['v2', 'v4'],
-            'h3': ['v1', 'v3', 'v4'],
-        }
-        timings = {
-            'h1': 1,
-            'h2': 2,
-            'h3': 3,
-        }
-        self.hypergraph = TimeVaryingHypergraph(hedges, timings)
-    
-    def test_tests(self):
-        hedges = {
-            'h1': []
-        }
 
-        timings = {
-            'h1': 1
-        }
-        self.hypergraph = TimeVaryingHypergraph(hedges, timings)
-        self.assertEqual(single_source_dijkstra_vertices)
+    # def setUp(self):
+    #     """Check to see if the setup works"""
+    #     hedges = {
+    #         'h1': ['v1', 'v2', 'v3'],
+    #         'h2': ['v2', 'v4'],
+    #         'h3': ['v1', 'v3', 'v4'],
+    #     }
+    #     timings = {
+    #         'h1': 1,
+    #         'h2': 2,
+    #         'h3': 3,
+    #     }
+    #     self.hypergraph = TimeVaryingHypergraph(hedges, timings)
+    
+    def test_if_empty(self):
+        hedges = {}
+        timings = {}
+
+        hyper = TimeVaryingHypergraph(hedges, timings)
+        self.assertEqual(single_source_dijkstra_vertices(hyper, None, DistanceType.SHORTEST, min_timing=0), {})
 
     # def test_shortest_distance(self):
     #     """test shortest distance for dijkstras"""

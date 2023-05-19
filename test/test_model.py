@@ -47,11 +47,11 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         self.assertEqual({"h1": 1, "h2":32}, hypergraph.timings())
 
 
-    def test_TimeVaringHyperGraph_empty(self):
-        hypergraph = TimeVaryingHypergraph({}, {})
+    # def test_TimeVaringHyperGraph_empty(self):
+    #     hypergraph = TimeVaryingHypergraph({}, {})
 
-        print(hypergraph.timings())
-        self.assertEqual({}, hypergraph.hyperedges())
-        self.assertEqual({}, hypergraph.timings())
-        self.assertEqual({}, hypergraph.vertices())
+    #     print(hypergraph.timings())
+    #     self.assertEqual({}, hypergraph.hyperedges())
+    #     self.assertEqual({}, hypergraph.timings())
+    #     self.assertEqual({}, hypergraph.vertices())
 

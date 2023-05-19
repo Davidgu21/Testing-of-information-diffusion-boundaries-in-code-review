@@ -2,6 +2,7 @@ import unittest
 
 from simulation.model import CommunicationNetwork
 from simulation.model import TimeVaryingHypergraph
+from simulation.model import EntityNotFound
 
 
 class ModelTest(unittest.TestCase):
@@ -29,29 +30,61 @@ class ModelDataTest(unittest.TestCase):
 
 class TestTimeVaryingHypergraph(unittest.TestCase):
 
-    def test_TimeVaringHypergraph_vertex(self):
+    def test_TimeVaryingHypergraph_vertex(self):
         hypergraph = TimeVaryingHypergraph({"h1": ["v1","v2"]}, {"h1": 1, "h2": 4})
 
         #gives hedges(first param)
         self.assertEqual({"h1"}, hypergraph.hyperedges())
 
-    def test_TimeVaringHypergraph_vertices(self):
+    def test_TimeVaryingHypergraph_vertices(self):
         hypergraph = TimeVaryingHypergraph({"h1" : ["v1", "v2"]}, {"h1": 1})
 
-        
         self.assertEqual({"v1", "v2"}, hypergraph.vertices())
 
-    def test_TimeVaringHypergraph_timings(self):
+    def test_TimeVaryingHypergraph_timings(self):
         hypergraph = TimeVaryingHypergraph({"h1": ["v1", "v2"]}, {"h1":1, "h2":32})
 
         self.assertEqual({"h1": 1, "h2":32}, hypergraph.timings())
 
 
-    # def test_TimeVaringHyperGraph_empty(self):
-    #     hypergraph = TimeVaryingHypergraph({}, {})
+    def test_TimeVaryingHyperGraph_empty(self):
+        hypergraph = TimeVaryingHypergraph({}, {})
 
-    #     print(hypergraph.timings())
-    #     self.assertEqual({}, hypergraph.hyperedges())
-    #     self.assertEqual({}, hypergraph.timings())
-    #     self.assertEqual({}, hypergraph.vertices())
+       
+        self.assertEqual({}, hypergraph.hyperedges())
+        self.assertEqual({}, hypergraph.timings())
+        self.assertEqual({}, hypergraph.vertices())
 
+    def test_TimeVaryingHyperGraph_no_vertices(self):
+        hypergraph = TimeVaryingHypergraph({"h1":[], "h2":[]}, {"h1": 1, "h2": 2})
+
+        #gives set() when empty not {}
+        self.assertEqual({}, hypergraph.vertices())
+        self.assertEqual(len(hypergraph.vertices()), 0)
+
+
+    def test_TimeVaryingHyperGraph_unknown_edge(self):
+        hypergraph = TimeVaryingHypergraph({"h1": ["v1", "v2"]}, {"h1":1})
+
+        with self.assertRaises(EntityNotFound) as err:
+            hypergraph.hyperedges("v3")
+
+    def test_time_varying_hypergraph_exceptions_input_strings(self):
+        hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 'words', 'h2': 'words', 'h3': 'words'})#changed integers to strings
+        self.assertRaises(hyper_graph)
+
+    def test_time_varying_hypergraph_exceptions_input_ints(self):
+        hyper_graph = TimeVaryingHypergraph({1: [1, 2], 2: [2, 3], 3: [3, 4]}, {1: 1, 2: 2, 3: 3})#changed strings to integers
+        self.assertRaises(hyper_graph)
+
+    def test_datastructure_constructor(self):
+        pass
+            
+            
+class TestCommunicationNetwork(unittest.TestCase):
+    
+    def test_from_json(self):
+        pass
+        #maybe mock
+        
+    

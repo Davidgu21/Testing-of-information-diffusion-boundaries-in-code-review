@@ -19,7 +19,7 @@ class MinimalPath(unittest.TestCase):
     def test_7(self):
         self.assertEqual(single_source_dijkstra_vertices(MinimalPath.tm, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 1, 'v3': 2, 'v4': 3})
 
-    def test_2(self):
+    def test_vertices_vs_hyperedges_shortest(self):
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
@@ -40,6 +40,18 @@ class MinimalPath(unittest.TestCase):
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
 
+
+    def test_timings(self):
+        """Tests the timings with the help of tm"""
+        self.assertEqual(MinimalPath.tm.timings(), {'h1': 1, 'h2': 2, 'h3': 3})
+ 
+    def test_vertices(self):
+        """Tests the vertices with the help of tm"""
+        self.assertEqual(MinimalPath.tm.vertices(), {'v1', 'v2', 'v3', 'v4'})
+
+    def test_hyperedges(self):
+        """Tests the hyperedges with the help of tm"""
+        self.assertEqual(MinimalPath.tm.hyperedges(), {'h1', 'h2', 'h3'})
      # changed variable input
     # def test_5_wierd_parameter(self):
     #     self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
@@ -58,66 +70,48 @@ class MinimalPath(unittest.TestCase):
 
 
 
-class test_correctness(unittest.TestCase):
+class CorrectnessTest(unittest.TestCase):
 
-    # def setUp(self):
-    #     """Check to see if the setup works"""
-    #     hedges = {
-    #         'h1': ['v1', 'v2', 'v3'],
-    #         'h2': ['v2', 'v4'],
-    #         'h3': ['v1', 'v3', 'v4'],
-    #     }
-    #     timings = {
-    #         'h1': 1,
-    #         'h2': 2,
-    #         'h3': 3,
-    #     }
-    #     self.hypergraph = TimeVaryingHypergraph(hedges, timings)
-    
     def test_if_empty(self):
         hedges = {}
         timings = {}
 
         hyper = TimeVaryingHypergraph(hedges, timings)
-        self.assertEqual(single_source_dijkstra_vertices(hyper, None, DistanceType.SHORTEST, min_timing=0), {})
+        self.assertDictEqual(single_source_dijkstra_vertices(hyper, None, DistanceType.SHORTEST, min_timing=0), {})
 
-    # def test_shortest_distance(self):
-    #     """test shortest distance for dijkstras"""
-    #     source_vertex = 'v1'
-    #     distance_type = 'SHORTEST'
-    #     min_timing = 0
+    def setUp(self):
+        """tests the setup"""
+        channels = {
+            'channel1': ['participant1', 'participant2'],
+            'channel2': ['participant2', 'participant3'],
+            'channel3': ['participant1', 'participant3']
+        }
 
-    #     expected_distances = {
-    #         'v2': 1,
-    #         'v3': 1,
-    #         'v4': 2,
-    #     }
+        # Create an instance of CommunicationNetwork for testing
+        self.network = self.CommunicationNetwork(channels, name='Test Network')
 
-    #     distances = single_source_dijkstra_vertices(self.hypergraph, source_vertex, distance_type, min_timing)
-    #     self.assertEqual(distances, expected_distances)
+    def test_channels(self):
+        """Tests the channels"""
+        expected_result = {'channel1', 'channel2', 'channel3'}
+        self.assertEqual(self.network.channels(), expected_result)
 
-    # def test_single_source_dijkstra_vertices(self):
-    #     """test the single source dijkstra function to see if it works as it"""
-    #     # Create a sample hypergraph
-    #     hedges = {
-    #         'h1': ['v1', 'v2', 'v3'],
-    #         'h2': ['v2', 'v4'],
-    #         'h3': ['v1', 'v3', 'v4'],
-    #     }
-    #     timings = {
-    #         'h1': 1,
-    #         'h2': 2,
-    #         'h3': 3,
-    #     }
-    #     hypergraph = TimeVaryingHypergraph(hedges, timings)
+    def test_participants(self):
+        """Tests the participants"""
+        expected_result = {'participant1', 'participant2', 'participant3'}
+        self.assertEqual(self.network.participants(), expected_result)
 
-    #     # Compute minimal distances from source vertex 'v1'
-    #     minimal_distances = single_source_dijkstra_vertices(hypergraph, 'v1', DistanceType.SHORTEST, 0)
+    def test_vertices(self):
+        """Test the vertices"""
+        expected_result = {'channel1', 'channel3'}
+        self.assertEqual(self.network.vertices('participant1'), expected_result)
 
-    #     # Verify the expected minimal distances
-    #     expected_distances = {
-    #         'v2': 1,
-    #         'v3': 1,
-    #         'v4': 2,
-    #     }
-    #     self.assertEqual(minimal_distances, expected_distances)
+    def test_hyperedges(self):
+        """Tests the hyperedges() method"""
+        expected_result = {'participant1', 'participant2'}
+        self.assertEqual(self.network.hyperedges('channel1'), expected_result)
+
+    def test_timings(self):
+        """Tests the timings"""
+        self.assertIsNone(self.network.timings())  # No timings provided in this test case
+        expected_result = None
+        self.assertEqual(self.network.timings('channel2'), expected_result)

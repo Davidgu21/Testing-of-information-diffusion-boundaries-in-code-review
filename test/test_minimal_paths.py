@@ -79,6 +79,8 @@ class CorrectnessTest(unittest.TestCase):
         hyper = TimeVaryingHypergraph(hedges, timings)
         self.assertDictEqual(single_source_dijkstra_vertices(hyper, None, DistanceType.SHORTEST, min_timing=0), {})
 
+
+
     def setUp(self):
         """tests the setup"""
         channels = {
@@ -87,8 +89,14 @@ class CorrectnessTest(unittest.TestCase):
             'channel3': ['participant1', 'participant3']
         }
 
+        timings = {
+        'channel1': 1,
+        'channel2': 2,
+        'channel3': 3
+        }
+
         # Create an instance of CommunicationNetwork for testing
-        self.network = self.CommunicationNetwork(channels, name='Test Network')
+        self.network = CommunicationNetwork(channels, timings, name='Test Network')
 
     def test_channels(self):
         """Tests the channels"""

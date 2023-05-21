@@ -56,17 +56,47 @@ class MinimalPath(unittest.TestCase):
     # def test_5_wierd_parameter(self):
     #     self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
 
-    # Repeat test
-    def test_6(self):   # EJ KLAR - Kräver mer alg. Research
-        rep_dict = {
-            'v2': 2,
-            'v3': 2,
-            'v4': 3
-        }
+class FuzzGraph(unittest.TestCase):
+    """
+    creates a randomly sized, randomly linked graph and calculates shortest path with "single_source_dijkstra_vertices"
+    """
+    def test_random_graph(self):   # EJ KLAR - Kräver mer alg. Research
+        random.seed(54677)          # !!! Find a good seed. Or try multiple
+        nr_of_nodes = random.randrange(0, 10)
+        node_names = []
+        random_graph = {}
+        #create nodes for graph
+        for i in range(0, nr_of_nodes):
+            node_names.append("node_" + str(i))
+        
+        # give nodes connections to other nodes
+        for n in node_names:
+            nr_of_connections = random.randrange(0,nr_of_nodes)
+            node_connections = []
+            for i in range(0,nr_of_connections):        # Can connect to same node more than once
+                node_connections.append(random.randrange(nr_of_nodes))                              # !!! USE IF JUST NUMBER IS NEEDED
+                # node_connections.append(node_names[random.randrange(nr_of_nodes)])                # !!! USE IF NAMES OF NODES IS NEEDED 
+            random_graph[n] = node_connections
+        
+        print(f"Dict with node and connections: \n{random_graph}\n")
+        # Make TimeVaryingHypergraph
+        #random_tm = TimeVaryingHypergraph(random_graph, {'h1': 1, 'h2': 2, 'h3': 3})            # !!! timings????                              #############
+        random_source_node = random.choice(node_names)
+        #result_min_path = single_source_dijkstra_vertices(MinimalPath.random_tm, random_source_node, DistanceType.SHORTEST, min_timing=0)  ###################
+        
 
-        for i in range(5):
-            result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
-            result_2 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+
+    # Repeat test
+    # def test_6(self):   # EJ KLAR - Kräver mer alg. Research
+    #     rep_dict = {
+    #         'v2': 2,
+    #         'v3': 2,
+    #         'v4': 3
+    #     }
+
+    #     for i in range(5):
+    #         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+    #         result_2 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
 
 
 

@@ -9,14 +9,14 @@ class MinimalPath(unittest.TestCase):
     cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
     tm = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
 
-    def test_known_path(self):
+    def test_known_path_cn(self):
         """
         Tests if shortest path is eqivelent to a specific dictionary:
         {'v2': 1, 'v3': 2, 'v4': 3}
         """
         self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 1, 'v3': 2, 'v4': 3})
 
-    def test_7(self):
+    def test_known_path_tm(self):
         self.assertEqual(single_source_dijkstra_vertices(MinimalPath.tm, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 1, 'v3': 2, 'v4': 3})
 
     def test_vertices_vs_hyperedges_shortest(self):
@@ -39,8 +39,8 @@ class MinimalPath(unittest.TestCase):
         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         result_2 = single_source_dijkstra_hyperedges(MinimalPath.cn, 'v1', DistanceType.FOREMOST, min_timing=0)
         self.assertEqual(result_1, result_2, 'Single-source Dijkstra implementations are not equivalent')
-
-
+    
+    # new test
     def test_timings(self):
         """Tests the timings with the help of tm"""
         self.assertEqual(MinimalPath.tm.timings(), {'h1': 1, 'h2': 2, 'h3': 3})
@@ -56,17 +56,53 @@ class MinimalPath(unittest.TestCase):
     # def test_5_wierd_parameter(self):
     #     self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
 
-    # Repeat test
-    def test_6(self):   # EJ KLAR - Kräver mer alg. Research
-        rep_dict = {
-            'v2': 2,
-            'v3': 2,
-            'v4': 3
-        }
+class FuzzGraph(unittest.TestCase):
+    """
+    creates a randomly sized, randomly linked graph and calculates shortest path with "single_source_dijkstra_vertices"
+    """
+    def test_random_graph(self):   # EJ KLAR - Kräver mer alg. Research
+        random.seed(54677)          # !!! Find a good seed. Or try multiple
+        nr_of_nodes = random.randrange(0, 10)
+        node_names = []
+        random_graph = {}
+        timings = {}
+        #create nodes for graph
+        for i in range(0, nr_of_nodes):
+            node_names.append("node_" + str(i))
+        
+        # give nodes connections to other nodes
+        for n in node_names:
+            nr_of_connections = random.randrange(0,nr_of_nodes)
+            node_connections = []
+            for i in range(0,nr_of_connections):        # Can connect to same node more than once
+                # node_connections.append(random.randrange(nr_of_nodes))                              # !!! USE IF JUST NUMBER IS NEEDED
+                node_connections.append(node_names[random.randrange(nr_of_nodes)])                # !!! USE IF NAMES OF NODES IS NEEDED 
+            random_graph[n] = node_connections
+        
+        #print(f"Dict with node and connections: \n{random_graph}\n")
+        
+        # Timings
+        for i in range(0,nr_of_nodes):
+            timings[node_names[i]] = i
+            
+        # Make TimeVaryingHypergraph
+        random_tm = TimeVaryingHypergraph(random_graph, timings)            # !!! timings????
+        random_source_node = random.choice(node_names)
+        result_min_path = single_source_dijkstra_vertices(MinimalPath.random_tm, random_source_node, DistanceType.SHORTEST, min_timing=0)
+        
 
-        for i in range(5):
-            result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
-            result_2 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+
+    # Repeat test
+    # def test_6(self):   # EJ KLAR - Kräver mer alg. Research
+    #     rep_dict = {
+    #         'v2': 2,
+    #         'v3': 2,
+    #         'v4': 3
+    #     }
+
+    #     for i in range(5):
+    #         result_1 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
+    #         result_2 = single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0)
 
 
 

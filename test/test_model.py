@@ -1,4 +1,7 @@
 import unittest
+import unittest.mock
+from unittest.mock import MagicMock
+
 
 from simulation.model import CommunicationNetwork
 from simulation.model import TimeVaryingHypergraph
@@ -69,6 +72,14 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         with self.assertRaises(EntityNotFound) as err:
             hypergraph.hyperedges("v3")
 
+
+    def test_TimeVaryingHyperGraph_unknown_vertex(self):
+        hypergraph = TimeVaryingHypergraph({"h1": ["v1"]}, {"h1":1})
+
+        with self.assertRaises(EntityNotFound) as err:
+            hypergraph.vertices("h2")
+    
+
     def test_time_varying_hypergraph_exceptions_input_strings(self):
         hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 'words', 'h2': 'words', 'h3': 'words'})#changed integers to strings
         self.assertRaises(hyper_graph)
@@ -84,7 +95,16 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
 class TestCommunicationNetwork(unittest.TestCase):
     
     def test_from_json(self):
-        pass
+        
+        file_path = "file/path"
+        #needs fix
+        with unittest.mock.patch('pathlib.Path.open', unittest.mock.mock_open()) as mock_file:
+            with unittest.mock.patch('json.loads', MagicMock(side_effect= [{"foo": "bar"}])) as json_mock:
+                CommunicationNetwork.from_json(file_path)
+
+                mock_file.assert_called_once()
+                mock_file.read.assert_called_once()
+
         #maybe mock
         
     

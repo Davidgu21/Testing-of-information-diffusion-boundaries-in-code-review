@@ -52,9 +52,10 @@ class MinimalPath(unittest.TestCase):
     def test_hyperedges(self):
         """Tests the hyperedges with the help of tm"""
         self.assertEqual(MinimalPath.tm.hyperedges(), {'h1', 'h2', 'h3'})
-     # changed variable input
-    # def test_5_wierd_parameter(self):
-    #     self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
+    
+    # changed variable input
+    def test_increased_timing(self):
+        self.assertEqual(single_source_dijkstra_vertices(MinimalPath.cn, 'v1', DistanceType.SHORTEST, min_timing=0), {'v2': 2, 'v3': 2, 'v4': 3})
 
 class FuzzGraph(unittest.TestCase):
     """
@@ -62,33 +63,35 @@ class FuzzGraph(unittest.TestCase):
     """
     def test_random_graph(self):   # EJ KLAR - Kräver mer alg. Research
         random.seed(54677)          # !!! Find a good seed. Or try multiple
-        nr_of_nodes = random.randrange(0, 10)
-        node_names = []
-        random_graph = {}
-        timings = {}
-        #create nodes for graph
-        for i in range(0, nr_of_nodes):
-            node_names.append("node_" + str(i))
-        
-        # give nodes connections to other nodes
-        for n in node_names:
-            nr_of_connections = random.randrange(0,nr_of_nodes)
-            node_connections = []
-            for i in range(0,nr_of_connections):        # Can connect to same node more than once
-                # node_connections.append(random.randrange(nr_of_nodes))                              # !!! USE IF JUST NUMBER IS NEEDED
-                node_connections.append(node_names[random.randrange(nr_of_nodes)])                # !!! USE IF NAMES OF NODES IS NEEDED 
-            random_graph[n] = node_connections
-        
-        #print(f"Dict with node and connections: \n{random_graph}\n")
-        
-        # Timings
-        for i in range(0,nr_of_nodes):
-            timings[node_names[i]] = i
+        for i in range(0, 100):
+            nr_of_nodes = random.randrange(0, 10)
+            node_names = []
+            random_graph = {}
+            timings = {}
+            random_source_node = {}
+            #create nodes for graph
+            for i in range(0, nr_of_nodes):
+                node_names.append("node_" + str(i))
             
-        # Make TimeVaryingHypergraph
-        random_tm = TimeVaryingHypergraph(random_graph, timings)            # !!! timings????
-        random_source_node = random.choice(node_names)
-        result_min_path = single_source_dijkstra_vertices(MinimalPath.random_tm, random_source_node, DistanceType.SHORTEST, min_timing=0)
+            # give nodes connections to other nodes
+            for n in node_names:
+                nr_of_connections = random.randrange(0,nr_of_nodes)
+                node_connections = []
+                for i in range(0,nr_of_connections):        # Can connect to same node more than once
+                    # node_connections.append(random.randrange(nr_of_nodes))                              # !!! USE IF JUST NUMBER IS NEEDED
+                    node_connections.append(node_names[random.randrange(nr_of_nodes)])                # !!! USE IF NAMES OF NODES IS NEEDED 
+                random_graph[n] = node_connections
+            
+            #print(f"Dict with node and connections: \n{random_graph}\n")
+            
+            # Timings
+            for i in range(0,nr_of_nodes):
+                timings[node_names[i]] = i
+                
+            # Make TimeVaryingHypergraph
+            random_tm = TimeVaryingHypergraph(random_graph, timings)            # !!! timings????
+            if len(node_names) > 0: random_source_node = random.choice(node_names)
+            result_min_path = single_source_dijkstra_vertices(random_tm, random_source_node, DistanceType.SHORTEST, min_timing=0)
         
 
 

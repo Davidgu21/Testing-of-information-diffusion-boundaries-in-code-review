@@ -76,19 +76,19 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
 
         self.assertEqual({}, hypergraph.hyperedges())
     
-        def test_TimeVaryingHyperGraph_empty_timings(self):
-            """Tests the hyperedges, timings and vertices functions with empty input"""
+    def test_TimeVaryingHyperGraph_empty_timings(self):
+        """Tests the hyperedges, timings and vertices functions with empty input"""
             
-            hypergraph = TimeVaryingHypergraph({}, {})
+        hypergraph = TimeVaryingHypergraph({}, {})
 
-            self.assertEqual({}, hypergraph.timings())
+        self.assertEqual({}, hypergraph.timings())
 
-        def test_TimeVaryingHyperGraph_empty_vertices(self):
-            """Tests the hyperedges, timings and vertices functions with empty input"""
+    def test_TimeVaryingHyperGraph_empty_vertices(self):
+        """Tests the hyperedges, timings and vertices functions with empty input"""
             
-            hypergraph = TimeVaryingHypergraph({}, {})
+        hypergraph = TimeVaryingHypergraph({}, {})
 
-            self.assertEqual({}, hypergraph.vertices())
+        self.assertEqual({}, hypergraph.vertices())
 
     def test_TimeVaryingHyperGraph_no_vertices(self):
         """Tests the vertices class function with no vertices"""
@@ -98,13 +98,13 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         #gives set() when empty not {}
         self.assertEqual({}, hypergraph.vertices())
 
-        def test_TimeVaryingHyperGraph_no_vertices_len(self):
-            """Tests the vertices class function with no vertices"""
+    def test_TimeVaryingHyperGraph_no_vertices_len(self):
+        """Tests the vertices class function with no vertices"""
             
-            hypergraph = TimeVaryingHypergraph({"h1":[], "h2":[]}, {"h1": 1, "h2": 2})
+        hypergraph = TimeVaryingHypergraph({"h1":[], "h2":[]}, {"h1": 1, "h2": 2})
 
-            #gives set() when empty not {}
-            self.assertEqual(len(hypergraph.vertices()), 0)
+        #gives set() when empty not {}
+        self.assertEqual(len(hypergraph.vertices()), 0)
 
 
     def test_TimeVaryingHyperGraph_unknown_edge(self):

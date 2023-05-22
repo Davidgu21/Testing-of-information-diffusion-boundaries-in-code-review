@@ -32,33 +32,43 @@ class ModelDataTest(unittest.TestCase):
 
 
 class TestTimeVaryingHypergraph(unittest.TestCase):
+    """Tests the TimeVaryingHypergraph class"""
 
     def test_TimeVaryingHypergraph_vertex(self):
+        """Tests that the correct hyperedges are returned by hyperedges class function"""
+
         hypergraph = TimeVaryingHypergraph({"h1": ["v1","v2"]}, {"h1": 1, "h2": 4})
 
         #gives hedges(first param)
         self.assertEqual({"h1"}, hypergraph.hyperedges())
 
     def test_TimeVaryingHypergraph_vertices(self):
+        """Tests that the correct vertices are returned by the vertices class function"""
+        
         hypergraph = TimeVaryingHypergraph({"h1" : ["v1", "v2"]}, {"h1": 1})
 
         self.assertEqual({"v1", "v2"}, hypergraph.vertices())
 
     def test_TimeVaryingHypergraph_timings(self):
+        """Tests that the correct timings are returned by the timings class function"""
+
         hypergraph = TimeVaryingHypergraph({"h1": ["v1", "v2"]}, {"h1":1, "h2":32})
 
         self.assertEqual({"h1": 1, "h2":32}, hypergraph.timings())
 
 
     def test_TimeVaryingHyperGraph_empty(self):
+        """Tests the hyperedges, timings and vertices functions with empty input"""
+        
         hypergraph = TimeVaryingHypergraph({}, {})
 
-       
         self.assertEqual({}, hypergraph.hyperedges())
         self.assertEqual({}, hypergraph.timings())
         self.assertEqual({}, hypergraph.vertices())
 
     def test_TimeVaryingHyperGraph_no_vertices(self):
+        """Tests the vertices class function with no vertices"""
+        
         hypergraph = TimeVaryingHypergraph({"h1":[], "h2":[]}, {"h1": 1, "h2": 2})
 
         #gives set() when empty not {}
@@ -67,6 +77,7 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
 
 
     def test_TimeVaryingHyperGraph_unknown_edge(self):
+        """Tests that the hyperedges class function raises the correct exception when input is a unknown edge"""
         hypergraph = TimeVaryingHypergraph({"h1": ["v1", "v2"]}, {"h1":1})
 
         with self.assertRaises(EntityNotFound) as err:
@@ -74,6 +85,7 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
 
 
     def test_TimeVaryingHyperGraph_unknown_vertex(self):
+        """Tests that the vertices class function raises the correct exception when input is a unknow vertex """
         hypergraph = TimeVaryingHypergraph({"h1": ["v1"]}, {"h1":1})
 
         with self.assertRaises(EntityNotFound) as err:
@@ -95,7 +107,7 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
 class TestCommunicationNetwork(unittest.TestCase):
     
     def test_from_json(self):
-        
+        """Mocks the open function, not done yet"""
         file_path = "file/path"
         #needs fix
         with unittest.mock.patch('pathlib.Path.open', unittest.mock.mock_open()) as mock_file:

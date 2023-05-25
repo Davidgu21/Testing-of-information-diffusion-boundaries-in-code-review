@@ -70,6 +70,7 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         self.assertEqual({"h1": 1, "h2":32}, hypergraph.timings())
 
 
+
     def test_TimeVaryingHyperGraph_empty_hyperedges(self):
         """Tests the hyperedges, timings and vertices functions with empty input"""
         
@@ -91,6 +92,7 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
 
         self.assertEqual({}, hypergraph.vertices())
 
+
     def test_TimeVaryingHyperGraph_no_vertices(self):
         """Tests the vertices class function with no vertices"""
         
@@ -107,6 +109,7 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         #gives set() when empty not {}
         self.assertEqual(len(hypergraph.vertices()), 0)
 
+    
     def test_TimeVaryingHyperGraph_unknown_edge(self):
         """Tests that the hyperedges class function raises the correct exception when input is a unknown edge"""
         hypergraph = TimeVaryingHypergraph({"h1": ["v1", "v2"]}, {"h1":1})
@@ -121,6 +124,20 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         with self.assertRaises(EntityNotFound) as err:
             hypergraph.vertices("h2")
     
+class TestTimeVaryingHypergraphCorrectness(unittest.TestCase):
+    """these tests check to see whether various methods return their expected outputs"""
+    def test_datastructure_constructor_hedges(self):
+        """this unittest is intented to make sure that the constructor works properly for the hyperedges"""
+        hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
+        self.assertEqual(hyper_graph._hedges, {'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']})
+
+    def test_datastructure_constructor_vertices(self):
+        """this unittest is intented to make sure that the constructor works properly for the vertices"""
+        hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
+        self.assertEqual(hyper_graph._vertices, {'v1': ['h1'], 'v2': ['h1', 'h2'], 'v3': ['h2', 'h3'], 'v4': ['h3']})
+
+class TestTimeVaryingHypergraphInputs(unittest.TestCase):      
+    """these tests are designed to see how the hypergraph class responds to various inputs"""
     def test_time_varying_hypergraph_exceptions_input_strings(self):
         """testing how the datastructure handles inputs that are all strings"""
         hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 'words', 'h2': 'words', 'h3': 'words'})
@@ -131,34 +148,19 @@ class TestTimeVaryingHypergraph(unittest.TestCase):
         hyper_graph = TimeVaryingHypergraph({1: [1, 2], 2: [2, 3], 3: [3, 4]}, {1: 1, 2: 2, 3: 3})
         self.assertRaises(hyper_graph)
 
-    def test_datastructure_constructor_hedges(self):
-        """this unittest is intented to make sure that the constructor works properly for the hyperedges"""
-        hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
-        self.assertEqual(hyper_graph._hedges, {'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']})
-
-    def test_datastructure_constructor_vertices(self):
-        """this unittest is intented to make sure that the constructor works properly for the vertices"""
-        hyper_graph = TimeVaryingHypergraph({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
-        self.assertEqual(hyper_graph._vertices, {'v1': ['h1'], 'v2': ['h1', 'h2'], 'v3': ['h2', 'h3'], 'v4': ['h3']})
-    
-    def test_hypergraph_timings(self):
-        pass
-            
-            
 class TestCommunicationNetwork(unittest.TestCase):
     
     def test_from_json(self):
         """Mocks the open function, tests that open and read are called"""
         file_path = "file/path"
-        #tests with orjson, if json change orsjon.loads to json.loads
-        with unittest.mock.patch('pathlib.Path.open', unittest.mock.mock_open(read_data="gggg")) as mock_file:
+        #tests with orjson, if json change orsjon.loads to json.loads 
+        with unittest.mock.patch('pathlib.Path.open', unittest.mock.mock_open(read_data="fake file")) as mock_file:
             with unittest.mock.patch('orjson.loads', MagicMock(side_effect= [{"-1000045392462314428":{"bound":"right_bounded","end":"2020-02-05T12:49:39","participants":[-4790071369877151138,-6410414390854871141],"start":"2020-02-04T07:10:58"}}])) as json_mock:
-                #print(json.loads())
                 CommunicationNetwork.from_json(file_path)
                 
-                #open file
+                #test that open() is called
                 mock_file.assert_called_once()
-                #read file
+                #test that read() is called
                 mock_file().read.assert_called_once()
 
     

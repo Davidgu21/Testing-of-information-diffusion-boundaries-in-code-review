@@ -10,36 +10,45 @@ from simulation.model import EntityNotFound
 
 
 class ModelTest(unittest.TestCase):
-
+    """"Tests the models """
     cn = CommunicationNetwork({'h1': ['v1', 'v2'], 'h2': ['v2', 'v3'], 'h3': ['v3', 'v4']}, {'h1': 1, 'h2': 2, 'h3': 3})
 
     def test_vertices_len(self):
+        """"Tests that CommunicationNetwork has right amount of vertices"""
         self.assertEqual(len(ModelTest.cn.vertices()), 4)
 
     def test_vertices(self):
+        """"Tests that the correct vertices are returned from a specific hedge"""
         self.assertEqual(ModelTest.cn.vertices('h1'), {'v1', 'v2'})
 
     def test_hyperedges_len(self):
+        """"Tests that CommunicationNetwork has the right amount of hyperedges"""
         self.assertEqual(len(ModelTest.cn.hyperedges()), 3)
 
     def test_hyperedges(self):
+        """"Tests that the correct hyperedges are returned from a specific vertice"""
         self.assertEqual(ModelTest.cn.hyperedges('v1'), {'h1'})
 
 
 class ModelDataTest(unittest.TestCase):
+    """"Tests CommunicationNetwork with data from files"""
     def test_model_with_data_participants(self):
+        """"Tests the that CommunicationNetwork participants are correct with data from file"""
         communciation_network = CommunicationNetwork.from_json('./data/networks/microsoft.json.bz2')
         self.assertEqual(len(communciation_network.participants()), 37103)
 
     def test_model_with_data_channels(self):
-            communciation_network = CommunicationNetwork.from_json('./data/networks/microsoft.json.bz2')
-            self.assertEqual(len(communciation_network.channels()), 309740)
+        """"Tests that CommunicationNetwork channels are correct with data from file"""
+        communciation_network = CommunicationNetwork.from_json('./data/networks/microsoft.json.bz2')
+        self.assertEqual(len(communciation_network.channels()), 309740)
 
     def test_model_with_data_vertices(self):
+        """"Tests that CommunicationNetwork vertices are correct with data from file"""
         communciation_network = CommunicationNetwork.from_json('./data/networks/microsoft.json.bz2')
         self.assertEqual(len(communciation_network.vertices()), 37103)
     
     def test_model_with_data_hyperedges(self):
+        """Tests that CommunicationNetwork hyperedges are correct with data from file"""
         communciation_network = CommunicationNetwork.from_json('./data/networks/microsoft.json.bz2')
         self.assertEqual(len(communciation_network.hyperedges()), 309740)
 
